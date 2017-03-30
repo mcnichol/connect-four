@@ -39,13 +39,30 @@ public class ConnectFourTest {
 
     @Test
     public void discsInsertedInColumnWithOneDiscTakePositionOne() throws Exception {
+        Position expectedPosition = new Position(1, 1);
+        connectFour.makeMove(1);
 
+        Position actualPosition = connectFour.makeMove(1);
+
+        assertThat(actualPosition, equalTo(expectedPosition));
     }
 
-    // When a disc is inserted into the board, the total number of discs increases
+    @Test
+    public void discCanBeInsertedIntoColumnsOtherThanOne() throws Exception {
+        Position expectedPosition = new Position(2, 0);
+
+        Position actualPosition = connectFour.makeMove(2);
+
+        assertThat(actualPosition, equalTo(expectedPosition));
+    }
+
     @Test
     public void discInsertedIncreasesTotalDiscsOnBoard() throws Exception {
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
 
+        assertThat(connectFour.getNumberOfDiscs(), equalTo(3));
     }
 
     // When a disc is put outside the boundaries, a Runtime Exception is thrown

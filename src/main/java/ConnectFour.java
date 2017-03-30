@@ -1,11 +1,16 @@
 
 public class ConnectFour {
 
+    private int row = 0;
+    private int numberOfDiscsPlayed = 0;
+
     public int getNumberOfDiscs() {
-        return 0;
+        return numberOfDiscsPlayed;
     }
 
     public Position makeMove(int column) {
-        return new Position(1, 0);
+        numberOfDiscsPlayed++;
+        
+        return new Position(column, row++);
     }
 }
