@@ -1,7 +1,7 @@
 
 public class ConnectFour {
 
-    private int row = 0;
+    private int[] row = new int[7];
     private int numberOfDiscsPlayed = 0;
 
     public int getNumberOfDiscs() {
@@ -10,7 +10,7 @@ public class ConnectFour {
 
     public Position makeMove(int column) {
         numberOfDiscsPlayed++;
-        
-        return new Position(column, row++);
+
+        return new Position(column, row[column]++);
     }
 }

@@ -57,6 +57,16 @@ public class ConnectFourTest {
     }
 
     @Test
+    public void eachColumnHasIndependentCountOfDiscsInStack() throws Exception {
+        Position expectedPosition = new Position(2, 0);
+
+        connectFour.makeMove(1);
+        Position actualPosition = connectFour.makeMove(2);
+
+        assertThat(actualPosition, equalTo(expectedPosition));
+    }
+
+    @Test
     public void discInsertedIncreasesTotalDiscsOnBoard() throws Exception {
         connectFour.makeMove(1);
         connectFour.makeMove(1);
