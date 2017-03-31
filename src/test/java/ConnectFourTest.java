@@ -1,15 +1,19 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConnectFourTest {
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     private ConnectFour connectFour;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         connectFour = new ConnectFour();
     }
 
@@ -18,7 +22,7 @@ public class ConnectFourTest {
      */
 
     @Test
-    public void initializesWithEmptySixBySevenGameBoard() throws Exception {
+    public void initializesWithEmptySixBySevenGameBoard() {
         assertThat(connectFour.getNumberOfDiscs(), equalTo(0));
     }
 
@@ -29,7 +33,7 @@ public class ConnectFourTest {
      */
 
     @Test
-    public void discsInsertedInEmptyColumnTakePositionZero() throws Exception {
+    public void discsInsertedInEmptyColumnTakePositionZero() {
         Position expectedPosition = new Position(1, 0);
 
         Position actualPosition = connectFour.makeMove(1);
@@ -38,7 +42,7 @@ public class ConnectFourTest {
     }
 
     @Test
-    public void discsInsertedInColumnWithOneDiscTakePositionOne() throws Exception {
+    public void discsInsertedInColumnWithOneDiscTakePositionOne() {
         Position expectedPosition = new Position(1, 1);
         connectFour.makeMove(1);
 
@@ -48,7 +52,7 @@ public class ConnectFourTest {
     }
 
     @Test
-    public void discCanBeInsertedIntoColumnsOtherThanOne() throws Exception {
+    public void discCanBeInsertedIntoColumnsOtherThanOne() {
         Position expectedPosition = new Position(2, 0);
 
         Position actualPosition = connectFour.makeMove(2);
@@ -57,7 +61,7 @@ public class ConnectFourTest {
     }
 
     @Test
-    public void eachColumnHasIndependentCountOfDiscsInStack() throws Exception {
+    public void eachColumnHasIndependentCountOfDiscsInStack() {
         Position expectedPosition = new Position(2, 0);
 
         connectFour.makeMove(1);
@@ -67,7 +71,7 @@ public class ConnectFourTest {
     }
 
     @Test
-    public void discInsertedIncreasesTotalDiscsOnBoard() throws Exception {
+    public void discInsertedIncreasesTotalDiscsOnBoard() {
         connectFour.makeMove(1);
         connectFour.makeMove(1);
         connectFour.makeMove(1);
@@ -75,16 +79,23 @@ public class ConnectFourTest {
         assertThat(connectFour.getNumberOfDiscs(), equalTo(3));
     }
 
-    // When a disc is put outside the boundaries, a Runtime Exception is thrown
     @Test
-    public void discPlacedOutsideBoundariesThrowsRuntimeException() throws Exception {
-
+    public void discPlacedOutsideBoundariesThrowsRuntimeException() {
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(8);
     }
 
-    // When a disc is inserted in to a column and there's no room available for it, then a Runtime Exception is thrown
     @Test
-    public void discInsertedInFullColumnThrowsRuntimeException() throws Exception {
+    public void discInsertedInFullColumnThrowsRuntimeException() {
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
 
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(1);
     }
 
 
