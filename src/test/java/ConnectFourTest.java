@@ -3,6 +3,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -12,10 +17,12 @@ public class ConnectFourTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
     private ConnectFour connectFour;
+    private OutputStream output;
 
     @Before
     public void setUp() {
-        connectFour = new ConnectFour();
+        output = new ByteArrayOutputStream();
+        connectFour = new ConnectFour(new PrintStream(output));
     }
 
     /* Requirement 1:
@@ -31,6 +38,7 @@ public class ConnectFourTest {
      * Players introduce discs on the top of the columns.
      * An introduced disc drops down the board if the column is empty.
      * Future discs introduced in the same column will stack over the previous ones.
+     * Throws errors when introduced outside of boundaries
      */
 
     @Test
@@ -80,6 +88,25 @@ public class ConnectFourTest {
         assertThat(connectFour.getNumberOfDiscs(), equalTo(3));
     }
 
+    @Test
+    public void discPlacedOutsideBoundariesThrowsRuntimeException() {
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(8);
+    }
+
+    @Test
+    public void discInsertedInFullColumnThrowsRuntimeException() {
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(1);
+    }
+
     /*
      *  Requirement 3:
      *  It is a two-person game, so there is one colour for each player.
@@ -113,21 +140,16 @@ public class ConnectFourTest {
      */
 
     @Test
-    public void discPlacedOutsideBoundariesThrowsRuntimeException() {
-        exception.expect(IllegalGameMove.class);
-        connectFour.makeMove(8);
+    public void getCurrentPlayer_printsPlayerToOutputStream() throws Exception {
+        connectFour.getCurrentPlayer();
+
+        assertThat(output.toString(), containsString("Player R turn"));
     }
 
     @Test
-    public void discInsertedInFullColumnThrowsRuntimeException() {
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
+    public void makeMove_printsBoardPositionToOutputStream() throws Exception {
         connectFour.makeMove(1);
 
-        exception.expect(IllegalGameMove.class);
-        connectFour.makeMove(1);
+        assertThat(output.toString(), containsString("| R |   |   |   |   |   |   |"));
     }
 }

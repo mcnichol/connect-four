@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class ConnectFour {
 
@@ -5,11 +8,16 @@ public class ConnectFour {
     private static final int MAX_ROWS = 6;
     private static final String PLAYER_ONE = "R";
     private static final String PLAYER_TWO = "G";
-
+    String[][] board = new String[MAX_COLUMNS][MAX_ROWS];
 
     private int[] row = new int[7];
     private int numberOfDiscsPlayed = 0;
     private String currentPlayer = PLAYER_ONE;
+    private PrintStream output;
+
+    public ConnectFour(PrintStream output) {
+        this.output = output;
+    }
 
     int getNumberOfDiscs() {
         return numberOfDiscsPlayed;
@@ -17,7 +25,7 @@ public class ConnectFour {
 
     Position makeMove(int column) {
         validateMove(column);
-
+        
         swapCurrentPlayer();
         numberOfDiscsPlayed++;
 
@@ -31,12 +39,14 @@ public class ConnectFour {
     private void validateMove(int column) {
         if (column > MAX_COLUMNS) {
             throw new IllegalGameMove("Outside the boundaries of game board");
-        }else if (row[column] == MAX_ROWS) {
+        } else if (row[column] == MAX_ROWS) {
             throw new IllegalGameMove("Can only have six discs in a column");
         }
     }
 
     String getCurrentPlayer() {
+        output.printf("Player %s turn", this.currentPlayer);
+
         return currentPlayer;
     }
 
