@@ -5,6 +5,7 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class ConnectFourTest {
 
@@ -98,5 +99,22 @@ public class ConnectFourTest {
         connectFour.makeMove(1);
     }
 
+    @Test
+    public void playerOneIsRed() throws Exception {
+        String expectedPlayer = "R";
 
+        String actualPlayer = connectFour.getCurrentPlayer();
+
+        assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    @Test
+    public void playerTwoIsGreen() throws Exception {
+        String expectedPlayer = "G";
+        connectFour.makeMove(1);
+
+        String actualPlayer = connectFour.getCurrentPlayer();
+
+        assertEquals(expectedPlayer, actualPlayer);
+    }
 }
