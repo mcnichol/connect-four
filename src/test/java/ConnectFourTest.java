@@ -80,24 +80,12 @@ public class ConnectFourTest {
         assertThat(connectFour.getNumberOfDiscs(), equalTo(3));
     }
 
-    @Test
-    public void discPlacedOutsideBoundariesThrowsRuntimeException() {
-        exception.expect(IllegalGameMove.class);
-        connectFour.makeMove(8);
-    }
-
-    @Test
-    public void discInsertedInFullColumnThrowsRuntimeException() {
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-        connectFour.makeMove(1);
-
-        exception.expect(IllegalGameMove.class);
-        connectFour.makeMove(1);
-    }
+    /*
+     *  Requirement 3:
+     *  It is a two-person game, so there is one colour for each player.
+     *  One player uses red ('R') and the other one uses green ('G').
+     *  Players alternate turns, inserting one disc every time.
+     */
 
     @Test
     public void playerOneIsRed() throws Exception {
@@ -116,5 +104,30 @@ public class ConnectFourTest {
         String actualPlayer = connectFour.getCurrentPlayer();
 
         assertEquals(expectedPlayer, actualPlayer);
+    }
+
+    /*  Requirement 4:
+     *  We want feedback when either an event or an error occurs
+     *  within the game. The output shows the status of the
+     *  board on every move.
+     */
+
+    @Test
+    public void discPlacedOutsideBoundariesThrowsRuntimeException() {
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(8);
+    }
+
+    @Test
+    public void discInsertedInFullColumnThrowsRuntimeException() {
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+
+        exception.expect(IllegalGameMove.class);
+        connectFour.makeMove(1);
     }
 }
