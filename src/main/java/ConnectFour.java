@@ -1,35 +1,46 @@
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class ConnectFour {
+class ConnectFour {
 
     private static final int MAX_COLUMNS = 7;
     private static final int MAX_ROWS = 6;
     private static final String PLAYER_ONE = "R";
     private static final String PLAYER_TWO = "G";
-    String[][] board = new String[MAX_COLUMNS][MAX_ROWS];
 
-    private int[] row = new int[7];
-    private int numberOfDiscsPlayed = 0;
-    private String currentPlayer = PLAYER_ONE;
+    private Board board;
+    private int[] row;
+    private int numberOfDiscsPlayed;
+    private String currentPlayer;
     private PrintStream output;
 
-    public ConnectFour(PrintStream output) {
+    ConnectFour(PrintStream output) {
+        this.board = new Board(MAX_COLUMNS, MAX_ROWS);
+        this.row = new int[7];
         this.output = output;
-    }
-
-    int getNumberOfDiscs() {
-        return numberOfDiscsPlayed;
+        this.numberOfDiscsPlayed = 0;
+        this.currentPlayer = PLAYER_ONE;
     }
 
     Position makeMove(int column) {
         validateMove(column);
-        
-        swapCurrentPlayer();
-        numberOfDiscsPlayed++;
+        Position newPosition = populateBoardPosition(column);
 
-        return new Position(column, row[column]++);
+        this.output.println(board);
+        swapCurrentPlayer();
+        this.numberOfDiscsPlayed++;
+
+        return newPosition;
+    }
+
+    private Position populateBoardPosition(int column) {
+        Position position = new Position(column, row[column]++);
+        board.makeMove(position, getCurrentPlayer());
+
+        return position;
+    }
+
+    int getNumberOfDiscs() {
+        return numberOfDiscsPlayed;
     }
 
     private void swapCurrentPlayer() {
