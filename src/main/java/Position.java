@@ -1,10 +1,10 @@
 public class Position {
     private int column;
-    private int row;
+    private int depth;
 
-    public Position(int column, int row) {
+    public Position(int column, int depth) {
         this.column = column;
-        this.row = row;
+        this.depth = depth;
     }
 
     public int getColumn() {
@@ -15,12 +15,12 @@ public class Position {
         this.column = column;
     }
 
-    public int getRow() {
-        return row;
+    public int getDepth() {
+        return depth;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     @Override
@@ -31,13 +31,13 @@ public class Position {
         Position position = (Position) o;
 
         if (column != position.column) return false;
-        return row == position.row;
+        return depth == position.depth;
     }
 
     @Override
     public int hashCode() {
         int result = column;
-        result = 31 * result + row;
+        result = 31 * result + depth;
         return result;
     }
 
@@ -45,7 +45,7 @@ public class Position {
     public String toString() {
         return "Position{" +
                 "column=" + column +
-                ", row=" + row +
+                ", depth=" + depth +
                 '}';
     }
 }

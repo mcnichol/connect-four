@@ -1,4 +1,5 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,7 +11,7 @@ import java.io.PrintStream;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class ConnectFourTest {
 
@@ -45,9 +46,9 @@ public class ConnectFourTest {
     public void discsInsertedInEmptyColumnTakePositionZero() {
         Position expectedPosition = new Position(1, 0);
 
-//        Position actualPosition = connectFour.makeMove(1);
-//
-//        assertThat(actualPosition, equalTo(expectedPosition));
+        Position actualPosition = connectFour.makeMove(1);
+
+        assertThat(actualPosition, equalTo(expectedPosition));
     }
 
     @Test
@@ -152,4 +153,56 @@ public class ConnectFourTest {
 
         assertThat(output.toString(), containsString("| R |   |   |   |   |   |   |"));
     }
+
+    @Test
+    public void makeMove_multipleMovesMade_printsBoardPositionToOutputStream() throws Exception {
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(1);
+        connectFour.makeMove(2);
+
+        String expectedString =
+                "| G |   |   |   |   |   |   |\n" +
+                        "-----------------------------\n" +
+                        "| R |   |   |   |   |   |   |\n" +
+                        "-----------------------------\n" +
+                        "| G |   |   |   |   |   |   |\n" +
+                        "-----------------------------\n" +
+                        "| R |   |   |   |   |   |   |\n" +
+                        "-----------------------------\n" +
+                        "| G |   |   |   |   |   |   |\n" +
+                        "-----------------------------\n" +
+                        "| R |   |   |   |   |   |   |\n" +
+                        "-----------------------------";
+
+        assertThat(output.toString(), containsString(expectedString));
+    }
+
+    /* Requirement 5:
+     * When no more discs can be inserted,
+     * the game finishes and it is considered a draw.
+     */
+    @Test
+    public void whenGameStarts_isNotFinished() throws Exception {
+        assertFalse(connectFour.isFinished());
+    }
+
+    @Ignore
+    @Test
+    public void whenNoMoreMoves_isFinished() throws Exception {
+        for (int i = 1; i <= 7; i++) {
+            connectFour.makeMove(i);
+            connectFour.makeMove(i);
+            connectFour.makeMove(i);
+            connectFour.makeMove(i);
+            connectFour.makeMove(i);
+            connectFour.makeMove(i);
+        }
+
+        assertTrue(connectFour.isFinished());
+    }
+
 }

@@ -8,14 +8,14 @@ class ConnectFour {
     private static final String PLAYER_TWO = "G";
 
     private Board board;
-    private int[] row;
+    private int[] columnDepth;
     private int numberOfDiscsPlayed;
     private String currentPlayer;
     private PrintStream output;
 
     ConnectFour(PrintStream output) {
-        this.board = new Board(MAX_COLUMNS, MAX_ROWS);
-        this.row = new int[7];
+        this.board = new Board(MAX_ROWS, MAX_COLUMNS);
+        this.columnDepth = new int[MAX_ROWS];
         this.output = output;
         this.numberOfDiscsPlayed = 0;
         this.currentPlayer = PLAYER_ONE;
@@ -25,6 +25,7 @@ class ConnectFour {
         validateMove(column);
         Position newPosition = populateBoardPosition(column);
 
+        this.output.flush();
         this.output.println(board);
         swapCurrentPlayer();
         this.numberOfDiscsPlayed++;
@@ -33,7 +34,7 @@ class ConnectFour {
     }
 
     private Position populateBoardPosition(int column) {
-        Position position = new Position(column, row[column]++);
+        Position position = new Position(column, columnDepth[column]++);
         board.makeMove(position, getCurrentPlayer());
 
         return position;
@@ -50,12 +51,13 @@ class ConnectFour {
     private void validateMove(int column) {
         if (column > MAX_COLUMNS) {
             throw new IllegalGameMove("Outside the boundaries of game board");
-        } else if (row[column] == MAX_ROWS) {
+        } else if (columnDepth[column] == MAX_ROWS) {
             throw new IllegalGameMove("Can only have six discs in a column");
         }
     }
 
     String getCurrentPlayer() {
+        output.flush();
         output.printf("Player %s turn", this.currentPlayer);
 
         return currentPlayer;
@@ -63,5 +65,9 @@ class ConnectFour {
 
     private void setCurrentPlayer(String nextPlayer) {
         currentPlayer = nextPlayer;
+    }
+
+    public boolean isFinished() {
+        return false;
     }
 }

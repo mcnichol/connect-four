@@ -1,45 +1,63 @@
 public class Board {
+    private static final String EMPTY_BOARD_TOKEN = "\0";
+
     private String[][] boardState;
+    private int row;
 
-    Board(int maxColumns, int maxRows) {
-        boardState = new String[maxRows][maxColumns];
+    Board(int row, int column) {
+        this.row = row;
+        this.boardState = new String[row][column];
+        initializeEmptyBoard();
+    }
 
+    public String generateFormattedBoard() {
+        StringBuilder formattedBoard = new StringBuilder();
+
+        for (String[] row : boardState) {
+            formattedBoard.append(generateFormattedRow(row));
+            formattedBoard.append("\n-----------------------------");
+        }
+
+        return formattedBoard.toString();
+    }
+
+    private String generateFormattedRow(String[] row) {
+        StringBuilder formattedRow = new StringBuilder();
+        formattedRow.append("\n|");
+
+        for (String cell : row) {
+            formattedRow.append(" ").append(getCellValue(cell)).append(" |");
+        }
+
+        return formattedRow.toString();
+    }
+
+    void makeMove(Position position, String currentPlayer) {
+        boardState[getCellDepth(position)][position.getColumn() - 1] = currentPlayer;
+    }
+
+    private String getCellValue(String cellToken) {
+        return cellToken.equals(EMPTY_BOARD_TOKEN) ? " " : cellToken;
+    }
+
+    private int getCellDepth(Position position) {
+        return (row - 1) - position.getDepth();
+    }
+
+    private void initializeEmptyBoard() {
         for (int i = 0; i < boardState.length; i++) {
             for (int j = 0; j < boardState[i].length; j++) {
-                boardState[i][j] = "\0";
+                boardState[i][j] = EMPTY_BOARD_TOKEN;
             }
         }
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = generatedFormattedRow();
-
-        return sb.toString();
+        return generateFormattedBoard();
     }
 
-    private StringBuilder generatedFormattedRow() {
-        StringBuilder formattedRow = new StringBuilder();
-        for (String[] row : boardState) {
-            generateCell(formattedRow, row);
-            formattedRow.append("\n-----------------------------");
-        }
-        return formattedRow;
-    }
+    public void makeMove(int column) {
 
-    private void generateCell(StringBuilder formattedRow, String[] row) {
-        formattedRow.append("\n|");
-
-        for (String column : row) {
-            formattedRow.append(" ").append(getValue(column)).append(" |");
-        }
-    }
-
-    private String getValue(String s) {
-        return s.equals("\0") ? " " : s;
-    }
-
-    void makeMove(Position position, String currentPlayer) {
-        boardState[position.getColumn()][position.getRow()] = currentPlayer;
     }
 }
